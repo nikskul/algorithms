@@ -1,0 +1,56 @@
+package nikskul.graph.transition;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.StringTokenizer;
+
+public class EdgesListToAdjacencyList {
+    public static void main(String[] args) throws IOException {
+        try (
+            var is = new BufferedReader(new InputStreamReader(
+                new FileInputStream("input.txt")
+                // System.in
+            ));
+            var pr = new PrintWriter(
+                new FileOutputStream("output.txt")
+                // System.out
+            )
+        ) {
+            var st = new StringTokenizer(is.readLine());
+            int v = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+
+            int[][] m = new int[v][v];
+            for (int i = 0; i < e; i++) {
+                st = new StringTokenizer(is.readLine());
+                int v1 = Integer.parseInt(st.nextToken());
+                int v2 = Integer.parseInt(st.nextToken());
+
+                m[v1 - 1][v2 - 1] = 1;
+                m[v2 - 1][v1 - 1] = 1;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < v; i++) {
+                int count = 0;
+                StringJoiner sj = new StringJoiner(" ");
+                for (int j = 0; j < v; j++) {
+                    if (m[i][j] == 1) {
+                        count++;
+                        sj.add(String.valueOf(j + 1));
+                    }
+                }
+                sb.append(count).append(" ").append(sj);
+                sb.append(System.lineSeparator());
+            }
+            pr.print(sb.toString().trim());
+        }
+    }
+}
